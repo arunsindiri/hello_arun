@@ -5,29 +5,36 @@ export default function HomeScreen() {
     const [name, setName] = useState("");
     const [message, setMessage] = useState("");
 
-	async function sayHello() {
+    async function sayHello() {
+        try {
+            setMessage("Connecting...");
 
-    	const response = await fetch(
-        	"http://192.168.0.4:8000/users",
-        	{
-            	method: "POST",
-            	headers: {
-                	"Content-Type": "application/json"
-            	},
-            	body: JSON.stringify({
-                	name
-            	})
-        	}
-    	);
+            const response = await fetch(
+                "http://192.168.0.35:8001/users",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name
+                    })
+                }
+            );
 
-    	const data = await response.json();
+            const data = await response.json();
 
-    	setMessage("Hello " + data.name);
+            setMessage("Hello " + data.name);
 
-    	setTimeout(function () {
-        	setMessage("");
-    	}, 2000);
-	}
+            setTimeout(function () {
+                setMessage("");
+            }, 2000);
+
+        } catch (error) {
+            console.log(error);
+            setMessage("Error: " + String(error));
+        }
+    }
 
     return (
         <View style={styles.container}>

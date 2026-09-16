@@ -1,0 +1,20 @@
+1. Convert hello_arun backend into VidTalk backend
+2. Clean PostgreSQL schema
+3. Users API
+4. Native Kotlin Android project
+5. Connect Kotlin → FastAPI
+6. Login/authentication
+7. Video model
+8. Video listing
+9. Video playback
+10. Text comments
+11. Timestamp comments ⭐
+12. Comment markers
+13. Replies
+14. CameraX recording
+15. Video comments
+16. Cloudinary upload
+17. Reactions
+18. Offline/local data with Room
+19. Production HTTPS deployment
+20. Final APK
