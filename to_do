@@ -18,3 +18,405 @@
 18. Offline/local data with Room
 19. Production HTTPS deployment
 20. Final APK
+
+
+🎥 VidTalk Development Roadmap
+Phase 0: Prepare hello_arun
+Create Git checkpoint
+Commit the current working hello_arun project.
+This becomes our safe starting point.
+Clean the project
+Remove experimental/test code that we no longer need.
+Keep the working FastAPI + PostgreSQL foundation.
+
+Create VidTalk project structure
+
+hello_arun/
+├── backend/
+├── mobile/
+└── README.md
+Phase 1: Backend Foundation
+4. Convert users into the VidTalk user system
+
+Current:
+
+users
+ ├── id
+ └── name
+
+Eventually:
+
+users
+ ├── id
+ ├── google_id
+ ├── display_name
+ ├── profile_image
+ └── created_at
+5. Introduce Alembic
+
+Instead of manually creating tables:
+
+SQLAlchemy Models
+       ↓
+    Alembic
+       ↓
+ PostgreSQL
+
+We'll learn migrations properly.
+
+6. Organize FastAPI
+
+Move from one main.py toward:
+
+backend/
+├── app/
+│   ├── main.py
+│   ├── database.py
+│   ├── models/
+│   ├── schemas/
+│   ├── routes/
+│   └── services/
+├── alembic/
+└── requirements.txt
+Phase 2: Native Android App
+
+This is where we move toward your actual VidTalk stack.
+
+7. Create native Android project
+Kotlin
+Jetpack Compose
+8. Learn Android project structure
+
+Understand:
+
+Activity
+Composable
+Screen
+State
+ViewModel
+9. Implement MVVM
+Compose UI
+    ↓
+ViewModel
+    ↓
+Repository
+10. Add Retrofit + OkHttp
+Android
+   ↓
+Retrofit
+   ↓
+FastAPI
+11. Connect Android to our FastAPI /users
+
+This is essentially the native Android version of what we just achieved with hello_arun.
+
+Phase 3: Authentication
+12. Google Sign-In
+Android
+   ↓
+Google
+   ↓
+Authentication
+   ↓
+FastAPI
+13. Backend authentication
+
+FastAPI verifies the authenticated user.
+
+14. User creation/login
+Google user
+     ↓
+FastAPI
+     ↓
+PostgreSQL
+Phase 4: Video System 🎬
+15. Create videos table
+
+Something like:
+
+videos
+├── id
+├── user_id
+├── title
+├── description
+├── video_url
+└── created_at
+16. Video APIs
+
+For example:
+
+GET    /videos
+GET    /videos/{id}
+POST   /videos
+DELETE /videos/{id}
+17. Video listing screen
+
+Android:
+
+Home
+ ↓
+Video list
+ ↓
+Select video
+18. Add Media3 / ExoPlayer
+Video URL
+    ↓
+Media3
+    ↓
+Playback
+Phase 5: Text Comments
+19. Create comments table
+comments
+├── id
+├── user_id
+├── video_id
+├── text
+├── timestamp
+├── parent_comment_id
+└── created_at
+20. Comment APIs
+GET  /videos/{id}/comments
+POST /comments
+21. Display comments
+Video
+ ↓
+Comments
+ ↓
+User comments
+22. Create comments from Android
+Android
+ ↓
+ViewModel
+ ↓
+Repository
+ ↓
+Retrofit
+ ↓
+FastAPI
+ ↓
+PostgreSQL
+Phase 6: ⭐ Timestamp Comments
+
+This is the heart of VidTalk.
+
+23. Capture current video position
+
+Example:
+
+Video position = 92 seconds
+24. Send timestamp with comment
+POST /comments
+
+{
+    "text": "This part is interesting",
+    "timestamp": 92
+}
+25. Display timestamp markers
+0:00 ───●────────●──────────●── 10:00
+        1:32     5:14       8:42
+26. Tap marker → seek video
+Marker
+  ↓
+timestamp = 92
+  ↓
+ExoPlayer.seekTo(92000)
+
+This will be one of our major milestones.
+
+Phase 7: Replies
+27. Implement parent_comment_id
+Comment
+ ├── Reply
+ │    └── Reply
+ └── Reply
+28. Reply APIs
+29. Reply UI
+Phase 8: Video Comments 📹
+
+Now we introduce CameraX.
+
+30. CameraX setup
+31. Record short video
+
+For example:
+
+Record
+   ↓
+Video clip
+   ↓
+Preview
+32. Add video comment model
+
+A comment can become:
+
+Text comment
+OR
+Video comment
+33. Upload video comment
+Android
+   ↓
+FastAPI
+   ↓
+Cloudinary
+   ↓
+Video URL
+   ↓
+PostgreSQL
+Phase 9: Cloudinary
+34. Configure Cloudinary
+35. Upload videos
+36. Store Cloudinary URL in PostgreSQL
+
+Important principle:
+
+PostgreSQL
+    ❌ actual video file
+
+PostgreSQL
+    ✅ video URL
+
+Cloudinary
+    ✅ actual video
+Phase 10: Reactions
+37. Like
+38. Dislike
+39. Reaction database design
+40. Reaction APIs
+41. Reaction UI
+Phase 11: Local Android Storage
+42. Add Room
+
+We'll decide what data actually benefits from local storage.
+
+Repository
+   ├── Retrofit
+   └── Room
+43. Offline/cache behavior
+Phase 12: UI/UX
+44. Home screen
+45. Video screen
+46. Comment panel
+47. Timestamp markers
+48. Profile screen
+49. Upload screen
+50. Record video-comment screen
+51. Loading/error/empty states
+Phase 13: Security & Backend Quality
+52. Authentication protection
+53. Authorization
+
+Example:
+
+User A
+ ❌ delete User B's video
+54. Input validation
+55. Error handling
+56. API response consistency
+57. Database constraints/indexes
+Phase 14: Testing
+58. Backend API testing
+59. Database testing
+60. Android testing
+61. Authentication testing
+62. Video upload testing
+63. Timestamp-comment testing
+64. Video-comment testing
+Phase 15: Production
+65. Deploy PostgreSQL
+66. Deploy FastAPI
+67. Configure HTTPS
+68. Configure Cloudinary production settings
+69. Change Android API URL
+
+From our current local setup:
+
+http://192.168.0.35:8001
+
+to something like:
+
+https://api.vidtalk.example
+70. Production APK
+
+Build:
+
+Android
+   ↓
+Release build
+   ↓
+APK / AAB
+🗺️ The whole journey
+HELLO ARUN
+    │
+    ▼
+Backend Foundation
+    │
+    ▼
+Native Kotlin Android
+    │
+    ▼
+MVVM + Retrofit
+    │
+    ▼
+Authentication
+    │
+    ▼
+Videos
+    │
+    ▼
+ExoPlayer
+    │
+    ▼
+Text Comments
+    │
+    ▼
+⭐ Timestamp Comments
+    │
+    ▼
+Replies
+    │
+    ▼
+CameraX
+    │
+    ▼
+Video Comments
+    │
+    ▼
+Cloudinary
+    │
+    ▼
+Reactions
+    │
+    ▼
+Room
+    │
+    ▼
+Testing
+    │
+    ▼
+HTTPS + Deployment
+    │
+    ▼
+       🎥 VIDTALK
+Our working rule
+
+We do not jump from Step 1 to Step 50.
+
+For every step:
+
+1. What are we building?
+        ↓
+2. Why do we need it?
+        ↓
+3. Understand the concept
+        ↓
+4. Write small code
+        ↓
+5. Run it
+        ↓
+6. Test it
+        ↓
+7. Explain the code
+        ↓
+8. Commit to Git
+        ↓
+9. Next step
